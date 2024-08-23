@@ -1,0 +1,6 @@
+env
+modules
+chat/**/*
+whisper/**/*
+*pycache*
+*.wav
