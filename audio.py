@@ -54,7 +54,6 @@ def recording():
             print("Exiting...")
             exit = True
             break
-        time.sleep(0.1)
 
     if exit: 
         stream.stop_stream()

@@ -55,6 +55,7 @@ class LLMAnswer:
 
             if line in ".!?:\n":
                 self.tempText += line
+                self.tempText = self.tempText.replace("*", "")
                 self.tempText = self.tempText.replace("\n", "").strip()
                 if(self.tempText != ""): self.text.append(self.tempText)
                 self.tempText = ""
@@ -90,6 +91,9 @@ class LLMAnswer:
 
         if not self.end or len(self.speak) > 0:
             threading.Timer(0.05, self.checkForSpeak).start()
+
+    def setStart(self):
+        self.isSpeaking = True
 
     def setEnd(self):
         self.end = True
