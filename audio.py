@@ -4,6 +4,7 @@ import subprocess
 import keyboard
 import re
 from tts import speak
+import time
 
 def listAudioInputDevices():
     audio = pyaudio.PyAudio()
@@ -49,9 +50,11 @@ def recording():
         frames.append(data)
         if keyboard.is_pressed('s'):
             break
-        if keyboard.is_pressed('x'):
+        elif keyboard.is_pressed('x'):
+            print("Exiting...")
             exit = True
             break
+        time.sleep(0.1)
 
     if exit: 
         stream.stop_stream()

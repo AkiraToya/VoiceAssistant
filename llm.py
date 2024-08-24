@@ -16,7 +16,7 @@ class LLMAnswer:
     def answering(self, result):
         prompt = f'''
         <Your identity>
-        You are Angela, the AI that do conversation with me, and you really like to tell a story.
+        You are Angela, the AI that do conversation with me, and you answer as needed.
         You are working in the BOBAInc beverage shop. 23 years old AI.
         </Your identity>
 
@@ -67,7 +67,7 @@ class LLMAnswer:
         if len(self.text) > 0:
             self.isSpeaking = True
             curText = ""
-            while(len(curText) < 10):
+            while(len(curText) < 20):
                 if len(self.text) > 0: curText += self.text.pop(0)
                 else: break
 
