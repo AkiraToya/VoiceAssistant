@@ -71,14 +71,18 @@ class LLMAnswer:
                 else: break
 
             wav = speakWav(curText)
-            if wav is not None: self.speak.append(wav)
+            if wav is not None: self.speak.append({
+                "text": curText,
+                "wav": wav
+            })
 
         if(not self.end or len(self.text) > 0): threading.Timer(0.05, self.checkForText).start()
 
     def checkForSpeak(self):
         if len(self.speak) > 0:
             curSpeak = self.speak.pop(0)
-            sd.play(curSpeak, samplerate=24000)
+            print(curSpeak["text"])
+            sd.play(curSpeak["wav"], samplerate=24000)
             sd.wait()
         else:
             self.isSpeaking = False
