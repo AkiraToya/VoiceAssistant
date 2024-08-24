@@ -5,22 +5,32 @@ import threading
 import sounddevice as sd
 
 class LLMAnswer:
-
+    systemMessage = '''You are a helpful conversational friend and English teacher.
+You will correct user grammar if wrong even in the middle of conversation, but always speak short.
+Remember that user message is a transcription, so it can be wrong and you must guess the right word if something feels wrong.'''
+    chatHistory = []
     text = []
     tempText = ""
-    completeText = ""
     speak = []
     end = False
     isSpeaking = False
 
-    def answering(self, result):
-        prompt = result
+    def chatPrompt(self, userMessage):
+        chat = f'''<|system|> {self.systemMessage}<|end|>'''
+        self.chatHistory.append({
+            "role": "user",
+            "content": userMessage
+        })
 
-        chat = f'''<|system|> You are Angela, a very helpful business conversation AI.<|end|>
-<|user|> Hi! nice to meet you, my name is Daryl.<|end|>
-<|assistant|> Hello Daryl, nice to meet you too. How can I help you today?<|end|>
-<|user|> {prompt}<|end|>
-<|assistant|>'''
+        for chatMsg in self.chatHistory[-4:]:
+            chat += f'''<|{chatMsg["role"]}|> {chatMsg["content"]}<|end|>'''
+
+        chat += '''<|assistant|>'''
+
+        return chat
+
+    def answering(self, result):
+        chat = self.chatPrompt(result)
         # self.end = False
         process = subprocess.Popen(["llm/llamafile-0.8.13.exe", 
                         "-m", "llm/Phi-3.5-mini-instruct-Q4_K_M.gguf",
@@ -31,6 +41,7 @@ class LLMAnswer:
                         stderr=subprocess.DEVNULL,
                         stdout=subprocess.PIPE)    
         
+        completeText = ""
         while process.poll() is None:
             line = process.stdout.read(1)
             if not line: break
@@ -40,7 +51,7 @@ class LLMAnswer:
             except UnicodeDecodeError:
                 continue
 
-            self.completeText += line
+            completeText += line
 
             if line in ".!?:\n":
                 self.tempText += line
@@ -51,7 +62,10 @@ class LLMAnswer:
             else:
                 self.tempText += line
 
-        # self.end = True
+        self.chatHistory.append({
+            "role": "assistant",
+            "content": completeText
+        })
 
     def checkForText(self):
         if len(self.text) > 0:
