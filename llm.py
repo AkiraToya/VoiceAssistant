@@ -39,6 +39,7 @@ class LLMAnswer:
                         "-ngl", "999",
                         "--no-display-prompt",
                         "-p", chat],
+                        stderr=subprocess.DEVNULL,
                         stdout=subprocess.PIPE)    
         
         while process.poll() is None:

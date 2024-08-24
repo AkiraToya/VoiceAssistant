@@ -53,7 +53,12 @@ def recording():
             exit = True
             break
 
-    if exit: return False
+    if exit: 
+        stream.stop_stream()
+        stream.close()
+        audio.terminate()
+        return False
+    
     print("Recording Finished.")
 
     stream.stop_stream()
