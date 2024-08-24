@@ -83,10 +83,14 @@ class LLMAnswer:
             threading.Timer(0.05, self.checkForSpeak).start()
 
     def setStart(self):
-        self.isSpeaking = True
+        self.isSpqwdeaking = True
 
     def setEnd(self):
         self.end = True
+
+    def clearJob(self):
+        self.text = []
+        self.speak = []
     
     def __init__(self):
         threading.Timer(0, self.checkForText).start()
