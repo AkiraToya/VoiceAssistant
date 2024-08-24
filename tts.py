@@ -258,3 +258,32 @@ def speakLong(text):
 
 # Save stereo WAV
 # wavfile.write('reply_stereo.wav', 24000, (stereo_wav * 32767).astype(np.int16))
+def speakWav(text):
+    print(f"Text length is {len(text)}")
+    # if(len(text) < 10): return None
+    if(len(text) > 500):
+        return speakLongWav(text)
+    
+    start = time.time()
+    noise = torch.randn(1,1,256).to(device)
+    wav = inference(text, noise, diffusion_steps=20, embedding_scale=2)
+    rtf = (time.time() - start) / (len(wav) / 24000)
+    print(f"RTF = {rtf:5f}")
+
+    wav = np.clip(wav, -1, 1)
+    return wav
+
+def speakLongWav(text):
+    sentences = text.split('.') # simple split by comma
+    wavs = []
+    s_prev = None
+    for text in sentences:
+        if text.strip() == "": continue
+        text += '.' # add it back
+        noise = torch.randn(1,1,256).to(device)
+        wav, s_prev = LFinference(text, s_prev, noise, alpha=0.3, diffusion_steps=20, embedding_scale=2)
+        wavs.append(wav)
+
+    wavs = np.concatenate(wavs)
+    wavs = np.clip(wavs, -1, 1)
+    return wavs
