@@ -14,24 +14,18 @@ class LLMAnswer:
     isSpeaking = False
 
     def answering(self, result):
-        prompt = f'''
-        <Your identity>
-        You are Angela, the AI that do conversation with me, and you answer as needed.
-        </Your identity>
+        prompt = result
 
-        <My new message for you>
-        {result}
-        </My new message for you>
-        '''
-
-        chat = f'''<bos><start_of_turn>user
-        {prompt}<end_of_turn>
-        <start_of_turn>angela
-        '''
+        chat = f'''<|system|> You are Angela, a very helpful business conversation AI.<|end|>
+<|user|> Hi! nice to meet you, my name is Daryl.<|end|>
+<|assistant|> Hello Daryl, nice to meet you too. How can I help you today?<|end|>
+<|user|> {prompt}<|end|>
+<|assistant|>'''
         # self.end = False
         process = subprocess.Popen(["llm/llamafile-0.8.13.exe", 
-                        "-m", "llm/gemma-2-2b-it-Q4_K_M.gguf",
+                        "-m", "llm/Phi-3.5-mini-instruct-Q4_K_M.gguf",
                         "-ngl", "999",
+                        "--ctx-size", "4096",
                         "--no-display-prompt",
                         "-p", chat],
                         stderr=subprocess.DEVNULL,
@@ -63,7 +57,7 @@ class LLMAnswer:
         if len(self.text) > 0:
             self.isSpeaking = True
             curText = ""
-            while(len(curText) < 20):
+            while(len(curText) < 40):
                 if len(self.text) > 0: curText += self.text.pop(0)
                 else: break
 
