@@ -4,3 +4,5 @@ chat/**/*
 whisper/**/*
 *pycache*
 *.wav
+llm/**/*
+*.log

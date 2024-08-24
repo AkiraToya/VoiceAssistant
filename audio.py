@@ -39,16 +39,21 @@ def recording():
         input_device_index=inputIdx,
         frames_per_buffer=1024)
 
-    print("Recording... press 's' to stop recording")
+    print("Recording... press 's' to stop recording, 'x' to exit")
 
     frames = []
+    exit = False
 
     while True:
         data = stream.read(1024)
         frames.append(data)
         if keyboard.is_pressed('s'):
             break
+        if keyboard.is_pressed('x'):
+            exit = True
+            break
 
+    if exit: return False
     print("Recording Finished.")
 
     stream.stop_stream()
@@ -60,6 +65,8 @@ def recording():
         wf.setsampwidth(audio.get_sample_size(pyaudio.paInt16))
         wf.setframerate(44100)
         wf.writeframes(b''.join(frames))
+    
+    return True
 
 def transcribing():
     process = subprocess.Popen(['whisper/whisper-tiny.en.exe','-f','output.wav', '-np'],
@@ -96,7 +103,7 @@ You are QA bot, answer short.<|im_end|>
 
     return stdoutStr
 
-recording()
-result = transcribing()
-answer = answering(result)
-speak(answer)
+# recording()
+# result = transcribing()
+# answer = answering(result)
+# speak(answer)
