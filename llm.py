@@ -17,12 +17,7 @@ class LLMAnswer:
         prompt = f'''
         <Your identity>
         You are Angela, the AI that do conversation with me, and you answer as needed.
-        You are working in the BOBAInc beverage shop. 23 years old AI.
         </Your identity>
-
-        <Our previous conversation summary>
-        I told you that I'm Andy and I am 35 years old. Works in a restaurant called BabeInc.
-        </Our previous conversation summa
 
         <My new message for you>
         {result}
@@ -86,7 +81,8 @@ class LLMAnswer:
             print(curSpeak["text"])
             sd.play(curSpeak["wav"], samplerate=24000)
             sd.wait()
-        else:
+
+        if len(self.speak) == 0 and len(self.text) == 0:
             self.isSpeaking = False
 
         if not self.end or len(self.speak) > 0:

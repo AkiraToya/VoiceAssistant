@@ -12,7 +12,9 @@ while True:
         if not live: 
             llmA.setEnd()
             exit()
+        
+        llmA.setStart()
         result = transcribing()
         llmA.answering(result)
     
-    time.sleep(0.5)
+    time.sleep(1)
