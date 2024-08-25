@@ -99,7 +99,7 @@ class AudioProcess:
         return True
 
     def transcribing(self):
-        process = subprocess.Popen(['whisper/whisper-tiny.en.exe','-f','output.wav', '-np'],
+        process = subprocess.Popen(['whisper/whisper-small.exe','-f','output.wav', '-np', '--gpu', 'auto'],
                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
         stdout, stderr = process.communicate()

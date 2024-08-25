@@ -126,6 +126,8 @@ sampler = DiffusionSampler(
 def inference(text, noise, diffusion_steps=5, embedding_scale=1):
     text = text.strip()
     text = text.replace('"', '')
+    if text == "": return None
+    # print("The text on inference: ", text)
     ps = global_phonemizer.phonemize([text])
     ps = word_tokenize(ps[0])
     ps = ' '.join(ps)
@@ -267,9 +269,10 @@ def speakWav(text):
     start = time.time()
     noise = torch.randn(1,1,256).to(device)
     wav = inference(text, noise, diffusion_steps=20, embedding_scale=2)
-    rtf = (time.time() - start) / (len(wav) / 24000)
+    # rtf = (time.time() - start) / (len(wav) / 24000)
     # print(f"RTF = {rtf:5f}")
 
+    if wav is None: return None
     wav = np.clip(wav, -1, 1)
     return wav
 

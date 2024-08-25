@@ -7,7 +7,9 @@ import sounddevice as sd
 class LLMAnswer:
     systemMessage = '''You are a helpful conversational friend and English teacher.
 You will correct user grammar if wrong even in the middle of conversation, but always speak short.
-Remember that user message is a transcription, so it can be wrong and you must guess the right word if something feels wrong.'''
+Remember that user message is a transcription, so it can be wrong and you must guess the right word if something feels wrong.
+And remember that your response will be converted to speech, so use words for conversation, not text chat.
+'''
     chatHistory = []
     text = []
     tempText = ""
